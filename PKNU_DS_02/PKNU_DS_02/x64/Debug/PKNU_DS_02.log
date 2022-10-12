@@ -1,0 +1,10 @@
+﻿  prob01.cpp
+  prob03.cpp
+  코드를 생성하고 있습니다...
+prob02.obj : error LNK2005: main이(가) prob01.obj에 이미 정의되어 있습니다.
+prob03.obj : error LNK2005: "void __cdecl sort(char * * const)" (?sort@@YAXQEAPEAD@Z)이(가) prob02.obj에 이미 정의되어 있습니다.
+prob03.obj : error LNK2005: main이(가) prob01.obj에 이미 정의되어 있습니다.
+prob03.obj : error LNK2005: "char * buffer" (?buffer@@3PADA)이(가) prob02.obj에 이미 정의되어 있습니다.
+prob03.obj : error LNK2005: "char * * words" (?words@@3PAPEADA)이(가) prob02.obj에 이미 정의되어 있습니다.
+prob03.obj : error LNK2005: "int count" (?count@@3HA)이(가) prob02.obj에 이미 정의되어 있습니다.
+C:\Users\Onique\Desktop\File\Workspace\VS\PKNU_DS_02\x64\Debug\PKNU_DS_02.exe : fatal error LNK1169: 여러 번 정의된 기호가 있습니다.
