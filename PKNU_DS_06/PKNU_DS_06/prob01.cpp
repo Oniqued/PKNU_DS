@@ -12,16 +12,16 @@ struct NODE {
 	char data[BUFFER_SIZE]; //노드의 데이터
 	int count = 0; //해당 단어의 등장 횟수를 저장할 변수 
 	struct NODE* next; //해당 노드의 다음 번지를 가리킨다
-}; 
+};
 typedef struct NODE Node; //NODE 타입의 변수 Node를 선언
 
 //사용될 전역 변수
 int total = 0; //전체 단어 등장 횟수를 저장할 변수
 
 //사용될 함수
-void addFront(char *word);
-void addAccord(char *word);
-void addAfter(Node* prev, char *word);
+void addFront(char* word);
+void addAccord(char* word);
+void addAfter(Node* prev, char* word);
 
 Node* head = NULL; //첫 노드 (첫 노드를 잃어버리지 않도록 전역변수로 선언)
 
@@ -33,16 +33,22 @@ int main() {
 		printf("ERROR! FAILED TO OPEN FILE\n");
 		return 0;
 	}
-	while (fscanf(file, "%s", buffer) != EOF) {
-		addAccord(buffer);
+
+	char* words[9999];
+	int i = 0;
+	
+	while (fscanf(file, "%s", buffer) != NULL) {
+		words[i] = strdup(buffer);
+		addAccord(words[i]);
+		i++;
 	}
 
 	for (Node* p = head; p != NULL; p = p->next) {
 		printf("%s: %d\n", p->data, p->count);
 	}
-	
+
 	printf("%d\n", total);
-	
+
 
 	fclose(file);
 
@@ -50,7 +56,7 @@ int main() {
 }
 
 //데이터를 맨 앞에 넣을땐, 1. 새로운 노드 생성 2. 생성된 노드의 next를 다음 노드와 연결 3. 맨앞에 삽입
-void addFront(char *word) {
+void addFront(char* word) {
 	Node* tmp = (Node*)malloc(sizeof(Node));
 	strcpy(tmp->data, word);
 	tmp->count++; //단어가 추가되었으므로 count 증가
@@ -60,7 +66,7 @@ void addFront(char *word) {
 }
 
 //해당 노드 앞에 노드를 추가하는 함수
-void addAfter(Node* prev, char *word) {
+void addAfter(Node* prev, char* word) {
 	if (prev == NULL) { //해당 노드가 첫번째 노드면 addFront를 실행한다.
 		addFront(word);
 		return;
@@ -76,10 +82,10 @@ void addAfter(Node* prev, char *word) {
 }
 
 //사전식 순서에 맞게 적절히 데이터 삽입
-void addAccord(char *word) {
+void addAccord(char* word) {
 	Node* curr = head; //cur는 첫번째 노드를 가리킴
 	Node* prev = NULL; //pre는 cur노드의 전 노드를 가리킴 (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
-	while(curr != NULL && strcmp(curr->data, word) <= 0) { //cur가 NULL이 아니며 word가 pre.data 보다 크거나 같다면 다음 노드로 이동
+	while (curr != NULL && strcmp(curr->data, word) <= 0) { //cur가 NULL이 아니며 word가 pre.data 보다 크거나 같다면 다음 노드로 이동
 		prev = curr; //pre에 cur를 저장 (pre는 cur-1번째 노드) (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
 		curr = curr->next; //다음 노드로 이동하며 word보다 크기가 큰 데이터를 찾음
 	}
