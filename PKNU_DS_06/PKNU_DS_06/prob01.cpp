@@ -33,15 +33,19 @@ int main() {
 		printf("ERROR! FAILED TO OPEN FILE\n");
 		return 0;
 	}
-
-	char* words[9999];
-	int i = 0;
 	
-	while (fscanf(file, "%s", buffer) != NULL) {
-		words[i] = strdup(buffer);
-		addAccord(words[i]);
-		i++;
+	while (fscanf(file, "%s", buffer) != EOF) {
+		addAccord(buffer);
 	}
+
+	////인자로 포인터 형식으로 안넘겨줘서 에러? >> 함수는 매개변수로 char *word를 받음 
+	//char* words[9999];
+	//int i = 0;
+	//while (fscanf(file, "%s", buffer) != EOF) {
+	//	words[i] = strdup(buffer);
+	//	addAccord(words[i]);
+	//	i++;
+	//}
 
 	for (Node* p = head; p != NULL; p = p->next) {
 		printf("%s: %d\n", p->data, p->count);
