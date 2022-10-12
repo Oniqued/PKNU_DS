@@ -2,52 +2,54 @@
 #define _CRT_NONSTDC_NO_WARNINGS
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define BUFFER_SIZE 100
-#define DICT_SIZE 9999
-
-void load();
 
 char buffer[BUFFER_SIZE];
-char dict[DICT_SIZE];
-
+//노드 구조체 
 struct NODE {
-	char* word;
-	int count;
+	char* data;
+	int count = 0;
 	struct NODE* next;
-};
-typedef struct NODE Node;
-Node* head = NULL;
+}; 
+typedef struct NODE Node; //NODE 타입의 변수 Node를 선언
+Node* head = NULL; //첫 노드 (첫 노드를 잃어버리지 않도록 전역변수로 선언)
 
-int main(void) {
-	load();
-	return 0;
-}
-
-void load() {
+int main() {
+	int total = 0;
 	FILE* file = fopen("harry.txt", "r");
 	if (file == NULL) {
 		printf("ERROR! FAILED TO OPEN FILE\n");
 		return;
 	}
-	else {
-		//일단 다 읽고 넣지 말고 넣은 단어가 이미 있는 단어면 +1 하는 로직 
-		while (fscanf(file, "%s", buffer) != EOF) {
-			//방금 읽은 단어 buffer가 이미 연결리스트에 있는지 검사
-			Node* p = head;
-			while (p != NULL) {
-				strcmp(p->word, buffer) == 0 ??
-					p = p->next;
-			}
-			if (p != NULL) p->count++;
-			else {
-				Node* t = ()malloc();
-				t->word = strdup(buffer); t->count = 1; t->next = NULL;
-				//malloc으로 노드를 새로 만들고, 거기에 단어를 저장하고, 카운트는 1로
-				//만든 노드를 head가 가리키는 연결리스트에 insert
-				addFirst(t);
-			}
-		}
+	
+	while (fscanf(file, "%s", buffer) != EOF) {
+		
+		
 	}
+
+
+	fclose(file);
+
+	return 0;
+}
+
+//데이터를 맨 앞에 넣을땐, 1. 새로운 노드 생성 2. 생성된 노드의 next를 다음 노드와 연결 3. 맨앞에 삽입
+void addFront(char* word) {
+	Node* tmp = (Node*)malloc(sizeof(Node));
+	tmp->data = word;
+	tmp->next = head; //새로운 노드의 next를 첫 노드였던 노드로 바꾼다 (최초 시행에는 첫 노드에 NULL 저장되어있음)
+	head = tmp; //시작 노드는 이제 tmp가 된다 >> 시작노드 내용 즉, Node[0] : data = word, next = NULL
+}
+
+//사전식 순서에 맞게 적절히 데이터 삽입
+void addAccord(char* word) {
+	Node* p = head; //p는 첫번째 노드를 가리킴
+	Node* q = NULL; //q는 p노드의 전 노드를 가리킴
+	while(p != NULL && strcmp(p->data, word)) { //p가 NULL이 아니며 word가 p.data 보다 크거나 같다면 다음 노드로 이동
+		
+	}
+
 }
