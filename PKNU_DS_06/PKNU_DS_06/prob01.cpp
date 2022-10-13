@@ -163,8 +163,12 @@ void descNode() {
 	if (currDesc == NULL) {
 		addNodeFront(curr);
 	}
+	else {
+
+	}
 }
 
+//노드를 맨 앞에 추가
 void addNodeFront(Node* node) {
 	node->next = headDesc;
 	headDesc = node;
