@@ -25,7 +25,10 @@ void addAfter(Node* prev, char* word);
 void removeAfter(Node* prev);
 void printNode();
 void delNodeUnder(int c);
-void descNode();
+void descNode(Node* node);
+void addNodeFront(Node* node);
+void addNodeAfter(Node* prev, Node* node);
+void printDescNode();
 
 
 int main() {
@@ -42,13 +45,22 @@ int main() {
 	}
 	fclose(file);
 
-	//printf("[문제1] 파일 내 모든 단어 & 빈도수 출력\n");
+	printf("[문제1] 파일 내 모든 단어 & 빈도수 출력\n");
 	//printNode();
-	//printf("------------------------------------------\n\n");
-	//printf("[문제2] 단어 등장 빈도가 10보다 높은 단어만 출력\n");
-	//delNodeUnder(10);
+	printf("\n\n------------------------------------------\n");
+	
+	printf("[문제2] 단어 등장 빈도가 10보다 높은 단어만 출력\n");
+	delNodeUnder(10);
 	//printNode();
-	descNode();
+	printf("\n\n------------------------------------------\n");
+	
+	printf("[문제3] 단어 등장 빈도가 10보다 높은 단어를 내림차순 출력\n");
+	for (Node* node = head; node != NULL; node = node->next) {
+		descNode(node);
+		printf("실행\n");
+	}
+
+	printDescNode();
 
 	return 0;
 }
@@ -95,14 +107,14 @@ void removeAfter(Node* prev) { //이전 노드가 NULL이면 지워야할 노드는 head인것이
 
 //사전식 순서에 맞게 적절히 데이터 삽입
 void addAccord(char* word) {
-	Node* curr = head; //cur는 첫번째 노드를 가리킴
-	Node* prev = NULL; //pre는 cur노드의 전 노드를 가리킴 (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
-	while (curr != NULL && strcmp(curr->data, word) <= 0) { //cur가 NULL이 아니며 word가 pre.data 보다 크거나 같다면 다음 노드로 이동
+	Node* curr = head; //curr는 첫번째 노드를 가리킴
+	Node* prev = NULL; //prev는 curr노드의 전 노드를 가리킴 (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
+	while (curr != NULL && strcmp(curr->data, word) <= 0) { //curr가 NULL이 아니며 word가 prev.data 보다 크거나 같다면 다음 노드로 이동
 		if (strcmp(curr->data, word) == 0){
 			curr->count++;
 			return;
 		}
-		prev = curr; //pre에 cur를 저장 (pre는 cur-1번째 노드) (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
+		prev = curr; //pre에 cur를 저장 (prev는 curr-1번째 노드) (노드에 데이터를 삽입하려면 직전 노드의 주소를 알고있어야하므로)
 		curr = curr->next; //다음 노드로 이동하며 word보다 크기가 큰 데이터를 찾음
 	}
 	if (prev == NULL) { //word가 노드 중 제일 크기가 작은 단어라면 
@@ -139,32 +151,25 @@ void delNodeUnder(int c) {
 	}
 }
 
-//void descNode() {
-//	Node* maxNode = NULL;
-//	int max = 0;
-//	for(Node *curr = head; curr != NULL; curr = curr->next){ //노드 순회
-//		if (curr->count > max) { //count가 제일 큰 노드를 찾는다
-//			max = curr->count; 
-//			maxNode = curr; 
-//		}
-//	}
-//	
-//	printf("%s: %d", maxNode->data, maxNode->count);
-//}
-
 //노드 내림차순 정렬
-void descNode() {
-	Node* curr = head; //넣으려는 노드
-	Node* currDesc = headDesc;
-
-	while (currDesc != NULL && (currDesc->count >= curr->count)) { //새로운 리스트 안에 있는 값보다 넣으려는 값이 더 작으면
-
+void descNode(Node* node) {
+	Node* currDesc = headDesc; 
+	Node* prevDesc = NULL; 
+	while (currDesc != NULL && (currDesc->count >= node->count)) { //curr가 들어갈 위치 찾기 >> 현재 Desc노드보다 넣으려는 값이 작은 동안 반복
+		if (currDesc->count == node->count) {
+			if (strcmp(currDesc->data, node->data) < 0) {
+				break;
+			}
+		}
+		prevDesc = currDesc;
+		currDesc = currDesc->next;
 	}
-	if (currDesc == NULL) {
-		addNodeFront(curr);
+	if (prevDesc == NULL) {
+		addNodeFront(node);
+		printf("실행1\n");
 	}
 	else {
-
+		addNodeAfter(prevDesc, node);
 	}
 }
 
@@ -172,4 +177,23 @@ void descNode() {
 void addNodeFront(Node* node) {
 	node->next = headDesc;
 	headDesc = node;
+}
+
+//prev 다음에 노드 추가
+void addNodeAfter(Node* prev, Node* node) {
+	if (prev == NULL) {
+		return;
+	}
+	node->next = prev->next;
+	prev->next = node;
+}
+
+//내림차순 노드 출력
+void printDescNode() {
+	int total = 0;
+	for (Node* node = headDesc; node != NULL; node = node->next) {
+		printf("%s: %d\n", node->data, node->count);
+		total++;
+	}
+	printf("%d\n", total);
 }
