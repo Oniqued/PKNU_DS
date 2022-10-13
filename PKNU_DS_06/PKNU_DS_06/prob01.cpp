@@ -15,6 +15,7 @@ struct NODE {
 };
 typedef struct NODE Node; //NODE 타입의 변수 Node를 선언
 Node* head = NULL; //첫 노드 (첫 노드를 잃어버리지 않도록 전역변수로 선언)
+Node* headDesc = NULL;
 
 //사용될 함수
 void addFront(char* word);
@@ -24,6 +25,7 @@ void addAfter(Node* prev, char* word);
 void removeAfter(Node* prev);
 void printNode();
 void delNodeUnder(int c);
+void descNode();
 
 
 int main() {
@@ -40,13 +42,13 @@ int main() {
 	}
 	fclose(file);
 
-	printf("[문제1] 파일 내 모든 단어 & 빈도수 출력\n");
-	printNode();
-	printf("------------------------------------------\n\n");
-	printf("[문제2] 단어 등장 빈도가 10보다 높은 단어만 출력\n");
-	delNodeUnder(10);
-	printNode();
-
+	//printf("[문제1] 파일 내 모든 단어 & 빈도수 출력\n");
+	//printNode();
+	//printf("------------------------------------------\n\n");
+	//printf("[문제2] 단어 등장 빈도가 10보다 높은 단어만 출력\n");
+	//delNodeUnder(10);
+	//printNode();
+	descNode();
 
 	return 0;
 }
@@ -135,4 +137,35 @@ void delNodeUnder(int c) {
 			curr = curr->next;
 		}
 	}
+}
+
+//void descNode() {
+//	Node* maxNode = NULL;
+//	int max = 0;
+//	for(Node *curr = head; curr != NULL; curr = curr->next){ //노드 순회
+//		if (curr->count > max) { //count가 제일 큰 노드를 찾는다
+//			max = curr->count; 
+//			maxNode = curr; 
+//		}
+//	}
+//	
+//	printf("%s: %d", maxNode->data, maxNode->count);
+//}
+
+//노드 내림차순 정렬
+void descNode() {
+	Node* curr = head; //넣으려는 노드
+	Node* currDesc = headDesc;
+
+	while (currDesc != NULL && (currDesc->count >= curr->count)) { //새로운 리스트 안에 있는 값보다 넣으려는 값이 더 작으면
+
+	}
+	if (currDesc == NULL) {
+		addNodeFront(curr);
+	}
+}
+
+void addNodeFront(Node* node) {
+	node->next = headDesc;
+	headDesc = node;
 }
