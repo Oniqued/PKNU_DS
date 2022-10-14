@@ -1,3 +1,4 @@
+//테스트 결과 데이터 출력 성공
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_NONSTDC_NO_WARNINGS
 
@@ -25,7 +26,7 @@ void addAfter(Node* prev, char* word);
 void removeAfter(Node* prev);
 void printNode();
 void delNodeUnder(int c);
-void descNode(Node* node);
+void addNodeDesc(Node* node);
 void addNodeFront(Node* node);
 void addNodeAfter(Node* prev, Node* node);
 void printDescNode();
@@ -46,21 +47,21 @@ int main() {
 	fclose(file);
 
 	printf("[문제1] 파일 내 모든 단어 & 빈도수 출력\n");
-	//printNode();
+	printNode();
 	printf("\n\n------------------------------------------\n");
 	
 	printf("[문제2] 단어 등장 빈도가 10보다 높은 단어만 출력\n");
 	delNodeUnder(10);
-	//printNode();
+	printNode();
 	printf("\n\n------------------------------------------\n");
 	
 	printf("[문제3] 단어 등장 빈도가 10보다 높은 단어를 내림차순 출력\n");
-	for (Node* node = head; node != NULL; node = node->next) {
-		descNode(node);
-		printf("실행\n");
+	
+	while (head != NULL) {
+		addNodeDesc(head);
 	}
-
 	printDescNode();
+	// 1 h=h->next p->next = null addNodeDesc(p) p = head
 
 	return 0;
 }
@@ -68,7 +69,7 @@ int main() {
 //데이터를 맨 앞에 넣을땐, 1. 새로운 노드 생성 2. 생성된 노드의 next를 다음 노드와 연결 3. 맨앞에 삽입
 void addFront(char* word) {
 	Node* tmp = (Node*)malloc(sizeof(Node));
-	tmp->data = word; // strcpy no, 주소 대입
+	tmp->data = word; // 주소 대입
 	tmp->count = 1; //단어가 새로 생겼으므로 count = 1
 	tmp->next = head; //새로운 노드의 next를 첫 노드였던 노드로 바꾼다 (최초 시행에는 첫 노드에 NULL 저장되어있음)
 	head = tmp; //시작 노드는 이제 tmp가 된다 >> 시작노드 내용 즉, Node[0] : data = word, next = NULL
@@ -152,21 +153,23 @@ void delNodeUnder(int c) {
 }
 
 //노드 내림차순 정렬
-void descNode(Node* node) {
+void addNodeDesc(Node* node) {
 	Node* currDesc = headDesc; 
-	Node* prevDesc = NULL; 
+	Node* prevDesc = NULL;	
 	while (currDesc != NULL && (currDesc->count >= node->count)) { //curr가 들어갈 위치 찾기 >> 현재 Desc노드보다 넣으려는 값이 작은 동안 반복
-		if (currDesc->count == node->count) {
+		if (currDesc->count == node->count) {	
 			if (strcmp(currDesc->data, node->data) < 0) {
-				break;
+				prevDesc = currDesc;
+				currDesc = currDesc->next;
 			}
 		}
-		prevDesc = currDesc;
-		currDesc = currDesc->next;
+		else {
+			prevDesc = currDesc;
+			currDesc = currDesc->next;
+		}
 	}
 	if (prevDesc == NULL) {
 		addNodeFront(node);
-		printf("실행1\n");
 	}
 	else {
 		addNodeAfter(prevDesc, node);
@@ -175,8 +178,11 @@ void descNode(Node* node) {
 
 //노드를 맨 앞에 추가
 void addNodeFront(Node* node) {
-	node->next = headDesc;
-	headDesc = node;
+	Node* tmp = (Node*)malloc(sizeof(Node));
+	tmp = head;
+	head = head->next;
+	tmp->next = headDesc;
+	headDesc = tmp;
 }
 
 //prev 다음에 노드 추가
@@ -184,8 +190,11 @@ void addNodeAfter(Node* prev, Node* node) {
 	if (prev == NULL) {
 		return;
 	}
-	node->next = prev->next;
-	prev->next = node;
+	Node* tmp = (Node*)malloc(sizeof(Node));
+	tmp = head;
+	head = head->next;
+	tmp->next = prev->next;
+	prev->next = tmp;
 }
 
 //내림차순 노드 출력
