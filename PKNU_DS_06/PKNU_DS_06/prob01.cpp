@@ -61,8 +61,6 @@ int main() {
 		addNodeDesc(head);
 	}
 	printDescNode();
-	// 1 h=h->next p->next = null addNodeDesc(p) p = head
-
 	return 0;
 }
 
@@ -87,7 +85,7 @@ void addAfter(Node* prev, char* word) {
 		return;
 	}
 	//해당 노드 앞에 넣으려면 새로운 Node를 하나 만들고 새로운 노드에 데이터를 넣는다. 
-	//그리고 새로운 노드와 다음 노드를 연결해주고 직전 노드는 새로운 노드와 연결한다.
+	//그리고 새로운 노드와 다음 노드를 연결해주고 직전 노드는 새로운 노드와 연결한다. 
 	Node* tmp = (Node*)malloc(sizeof(Node));
 	tmp->data = word;
 	tmp->count = 1; //단어가 추가되었으므로 count = 1
@@ -98,11 +96,11 @@ void addAfter(Node* prev, char* word) {
 //해당 노드의 다음 노드를 삭제하는 함수
 void removeAfter(Node* prev) { //이전 노드가 NULL이면 지워야할 노드는 head인것이므로 head의 정보를 변경해줘야한다.
 	Node* tmp = prev->next; //현재 노드
-	if (tmp == NULL) {
-		return;
+	if (prev == NULL) {
+		head = head->next;
 	}
-	else { //다음 노드를 제외했다. 이전 노드는 그대로 prev가 된다
-		prev->next = tmp->next;
+	else { //다음 노드를 제외했다. 이전 노드는 그대로 prev가 된다 (다음 노드를 삭제하면 이전 노드는 변동 없으므로 이전 노드는 그대로 둔다)
+		prev->next = tmp->next; //(prev->next = (prev->next)->next;
 	}
 }
 
@@ -142,13 +140,16 @@ void delNodeUnder(int c) {
 	Node* prev = NULL;
 	while(curr != NULL) {
 		if (curr->count <= c) { 
-			removeAfter(prev); //조건에 일치한 노드를 제외시켰다. prev는 그대로이므로 prev = curr는 해주지 않는다.
-			curr = curr->next;
+			removeAfter(prev); //조건에 일치한 노드를 제외시켰다. 
+			//위 함수를 실행한 후에는 
+			//prev는 그대로이므로 prev = curr는 해주지 않는다.
+			curr = curr->next; //지워진 노드의 다음 노드를 가리키는 포인터를  옮기는 작업 
 		}
 		else {
 			prev = curr;
 			curr = curr->next;
 		}
+		//curr = curr->next;
 	}
 }
 
@@ -157,10 +158,11 @@ void addNodeDesc(Node* node) {
 	Node* currDesc = headDesc; 
 	Node* prevDesc = NULL;	
 	while (currDesc != NULL && (currDesc->count >= node->count)) { //curr가 들어갈 위치 찾기 >> 현재 Desc노드보다 넣으려는 값이 작은 동안 반복
-		if (currDesc->count == node->count) {	
-			if (strcmp(currDesc->data, node->data) < 0) {
-				prevDesc = currDesc;
-				currDesc = currDesc->next;
+		if (currDesc->count == node->count) { //넣으려는 노드의 count가 넣음 당하는 노드의 count와 같다면 (아니면 그냥 else로)
+			if (strcmp(currDesc->data, node->data) < 0) { //넣으려는 노드의 단어가 넣음 당하는 노드의 단어를 비교한다.
+				//넣으려는 단어가 더 크면 뒤에다가 넣어야하므로..
+				prevDesc = currDesc; 
+				currDesc = currDesc->next; //다음 빈 곳을 가리키게 한다 (이제 끝단의 else로 이동)
 			}
 		}
 		else {
@@ -171,18 +173,19 @@ void addNodeDesc(Node* node) {
 	if (prevDesc == NULL) {
 		addNodeFront(node);
 	}
-	else {
+	else { //이전 노드 다음에 넣으려는 노드를 넣는다
 		addNodeAfter(prevDesc, node);
 	}
 }
 
 //노드를 맨 앞에 추가
 void addNodeFront(Node* node) {
-	Node* tmp = (Node*)malloc(sizeof(Node));
-	tmp = head;
-	head = head->next;
-	tmp->next = headDesc;
-	headDesc = tmp;
+	Node* tmp = (Node*)malloc(sizeof(Node)); //값을 넣을 임시노드 생성 
+	tmp = head; //임시노드에 헤드 노드 삽입 
+	head = head->next; //그리고 헤드 노드의 앞부분을 떼어내고, 헤드 다음 부분이 헤드가 되게 한다 (다듬기)
+	tmp->next = headDesc; //이제 임시노드의 다음(원래는 헤드의 다음 노드가 있었음)을 headDesc에 가져다 붙인다
+	//[tmp] - [headDesc] 상태 
+	headDesc = tmp; //마지막으로 headDesc의 헤드는 이제 tmp가 된다 (tmp->next에는 이전에 있던 headDesc가 딸려옴) [headDesc]
 }
 
 //prev 다음에 노드 추가
