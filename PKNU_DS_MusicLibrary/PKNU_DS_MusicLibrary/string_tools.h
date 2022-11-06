@@ -2,6 +2,6 @@
 #define STRING_TOOLS_H
 #include <stdio.h>
 
-int read_line(FILE* fp, char str[], int n);
+int read_line(FILE* fp, char str[], int n);	// 헤더 파일에 프로토타입 저장
 
 #endif
