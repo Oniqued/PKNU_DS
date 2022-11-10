@@ -1,35 +1,27 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_NONSTDC_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define BUFFER_SIZE 100
 
 //구조체 
-typedef struct stackName StackName;
-typedef struct stack Stack;
-
-struct stackName {
+typedef struct stack {
 	char* name;
-	Stack* stack;
-};
-
-struct stack {
-	int top = -1;
-	char* data;
-};
+	int top;
+	char* data[BUFFER_SIZE];
+}*Stack;
 
 //전역 변수
-StackName* stackNames[BUFFER_SIZE]; 
+Stack stack[BUFFER_SIZE]; 
 int count = 0;
 
 //프로토타입
 void processCommand();
 void handleCreate();
 void handlePush();
-void push();
 void handlePop();
-void pop();
 void handleList();
 int read_line(FILE* fp, char str[], int n);
 
@@ -64,38 +56,64 @@ void processCommand() {
 		else if (strcmp(command, "exit") == 0) {
 			break;
 		}
+		else {
+			printf("unknown command\n");
+		}
 	}
 }
 
 void handleCreate() {
 	char* stack_name = strtok(NULL, " "); //명령어 중에서 스택의 이름 추출
-	stackNames[count]->name = strdup(stack_name);
+	stack[count] = (Stack)malloc(sizeof(Stack));
+	stack[count]->name = strdup(stack_name);
+	stack[count]->top = -1;
 	count++;
-
-	printf("%s\n", stackNames[count]->name);
 }
 
 void handlePush() {
 	char* stack_name = strtok(NULL, " "); //명령어에서 스택의 이름 추출
 	char* stack_data = strtok(NULL, " "); //명령어에서 넣고자 하는 데이터 추출
-	for (int i = 0; i < count; i++) { // 이름이 일치하는 스택을 찾는다 
-		if (strcmp(stackNames[i]->name, stack_name) == 0) {
-			
-		}
+	if (stack_name == NULL || stack_data == NULL) {
+		printf("please enter command correctly\n");
+		return;
 	}
 
+	for (int i = 0; i < count; i++) { // 이름이 일치하는 스택을 찾는다 
+		if (strcmp(stack_name, stack[i]->name) == 0) {
+			stack[i]->top++;
+			stack[i]->data[stack[i]->top] = strdup(stack_data);
+		}
+	}
+	
 }
 
 void handlePop() {
+	char* stack_name = strtok(NULL, " "); //명령어에서 스택의 이름 추출
 
-}
-
-void pop() {
-
+	for (int i = 0; i < count; i++) { // 이름이 일치하는 스택을 찾는다 
+		if (strcmp(stack_name, stack[i]->name) == 0) {
+			if (stack[i]->top <= -1) {
+				return;
+			}
+			printf("%s\n", stack[i]->data[stack[i]->top]);
+			stack[i]->top--;
+		}
+	}
 }
 
 void handleList() {
-
+	char* stack_name = strtok(NULL, " "); //명령어에서 스택의 이름 추출
+	if (stack_name == NULL) {
+		printf("please enter stack name\n");
+		return;
+	}
+	for(int i = 0; i < count; i++){
+		if (strcmp(stack_name, stack[i]->name) == 0) {
+			for (int j = stack[i]->top; j >= 0; j--) {
+				printf("%s\n", stack[i]->data[j]);
+			}
+		}
+	}
 }
 
 int read_line(FILE* fp, char str[], int n) // (파일 포인터, 문자열을 저장할 배열, 문자열의 크기)
