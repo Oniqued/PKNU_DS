@@ -13,13 +13,14 @@
 //구조체 
 typedef struct testCase {
 	int data[BUFFER_SIZE];
-	int huristic;
+	long huristic;
 }Case;
 
 //함수 프로토타입
 void load();
 void allocation(int i);
 void search(int i, int j, int input);
+void printHuristic();
 
 //사용될 전역 변수
 int test_cases;
@@ -29,6 +30,7 @@ int main() {
 	clock_t start = clock();
 	load();
 	clock_t end = clock();
+	printHuristic();
 	printf("Elapsed Time: %lf\n", (double)(end - start)/ CLOCKS_PER_SEC);
 
 	return 0;
@@ -51,9 +53,9 @@ void load() {
 			fscanf(fp, "%d", &input); //넣으려는 값 스캔
 			search(i, j, input);
 			c[i]->data[j] = input; //데이터 삽입 
-			//printf("%d ", c[i]->data[j]);
 		}
-		printf("%d\n", c[i]->huristic);
+		printf("%d\n", c[i]->huristic % 1000000);
+
 	}
 }
 
@@ -70,5 +72,11 @@ void search(int i, int j, int input) {
 		else {
 			break;
 		}
+	}
+}
+
+void printHuristic() {
+	for (int i = 0; i < test_cases; i++) {
+		printf("%d\n", c[i]->huristic % 1000000);
 	}
 }
