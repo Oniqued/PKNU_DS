@@ -1,0 +1,4 @@
+﻿  prob01.cpp
+C:\Users\Onique\Desktop\File\Workspace\VS\PKNU_DS\PKNU_DS_09\PKNU_DS_09\prob01.cpp(38,14): error C2664: 'void search(Case)': 인수 1을(를) 'Case *'에서 'Case'(으)로 변환할 수 없습니다.
+C:\Users\Onique\Desktop\File\Workspace\VS\PKNU_DS\PKNU_DS_09\PKNU_DS_09\prob01.cpp(38,14): message : 소스 형식을 가져올 수 있는 생성자가 없거나 생성자 오버로드 확인이 모호합니다.
+C:\Users\Onique\Desktop\File\Workspace\VS\PKNU_DS\PKNU_DS_09\PKNU_DS_09\prob01.cpp(28,6): message : 'search' 선언을 참조하십시오.
