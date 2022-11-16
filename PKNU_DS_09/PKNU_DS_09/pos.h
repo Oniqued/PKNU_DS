@@ -4,12 +4,12 @@
 
 //πÊ«‚
 #define UP 0
-#define RIGHT_UP 1
-#define RIGHT 2
-#define RIGHT_DOWN 3
-#define DOWN 4
-#define LEFT_DOWN 5
-#define LEFT 6
+#define RIGHT 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT_UP 4
+#define RIGHT_DOWN 5
+#define LEFT_DOWN 6
 #define LEFT_UP 7
 
 typedef struct pos {

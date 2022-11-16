@@ -4,11 +4,18 @@
 Stack* create() {
     Stack *s = (Stack *)malloc(sizeof(Stack));
     s->top = -1;
+    s->comp_size = 0;
 
     return s;
 }
 
+void initStack(Stack* s) {
+    s->top = -1;
+    s->comp_size = 0;
+}
+
 void push(Stack *s, Position pos) {
+    s->comp_size++;
     s->top++;
     s->pos[s->top] = pos;
 }
