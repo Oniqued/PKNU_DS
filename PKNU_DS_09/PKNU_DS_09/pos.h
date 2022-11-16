@@ -1,16 +1,21 @@
 #ifndef POS_H
 #define POS_H
+#include <stdbool.h>
 
 //πÊ«‚
-#define NORTH 0
-#define EAST 1
-#define SOUTH 2
-#define WEST 3
+#define UP 0
+#define RIGHT_UP 1
+#define RIGHT 2
+#define RIGHT_DOWN 3
+#define DOWN 4
+#define LEFT_DOWN 5
+#define LEFT 6
+#define LEFT_UP 7
 
 typedef struct pos {
 	int x, y;
 }Position;
 
-//Position moveTo(Position pos, int dir);
+Position moveTo(Position pos, int dir);
 
 #endif POS_H
