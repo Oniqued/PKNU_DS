@@ -102,8 +102,8 @@ void search(Case* c) {
 				}
 			}
 		}
-		c->component[c->comp_count++] = q->comp_size;
-		make_empty(q);
+		c->component[c->comp_count++] = q->comp_size; //Que에 기록된 size를 각 component별 저장
+		make_empty(q); //사용한 Que 초기화 
 	}
 	
 }
